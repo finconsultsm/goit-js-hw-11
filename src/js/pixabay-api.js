@@ -1,6 +1,6 @@
 const PixabayApiKey = '30127977-afd00810882476e7ef9a8a757';
 
-const baseUrl = `https://pixabay.com/api/?key=${PixabayApiKey}`;
+const baseUrl = `https://pixabay.com/api/?key=${PixabayApiKey}&image_type=photo&orientation=horizontal&safesearch=true`;
 
 export const searchImages = (query, perPage) => {
   const url = `${baseUrl}&q=${query}&per_page=${perPage}`;
