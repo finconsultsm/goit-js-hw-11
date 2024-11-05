@@ -6,11 +6,40 @@ import 'izitoast/dist/css/iziToast.min.css';
 const form = document.querySelector('.search-form');
 const loader = document.querySelector('.loader-wrapper');
 
-form.addEventListener('submit', evt => {
+const url = new URL(window.location);
+const searchParams = url.searchParams;
+const query = searchParams.get('q');
+
+if (query) {
+  fetchImage(query)
+}
+
+
+
+form.addEventListener('submit', (evt => {
   evt.preventDefault();
 
   const formData = new FormData(form);
-  const query = formData.get('query');
+  const query = formData.get('query').trim();
+
+  if(query.length < 1) {
+    iziToast.error({
+      title: 'Error',
+      position: 'topRight',
+      message: 'Query field cannot be empty!',
+    });
+    return;
+  }
+
+  url.searchParams.set('q', query);
+  window.history.pushState({}, '', url);
+  
+  fetchImage(query);
+
+}));
+
+function fetchImage (query) {
+  
 
   loader.classList.add('show');
 
@@ -25,7 +54,6 @@ form.addEventListener('submit', evt => {
           message:
             'Sorry, there are no images matching your search query. Please try again!',
         });
-        return;
       }
       createGalaryMatkup(data.hits);
     })
@@ -37,4 +65,4 @@ form.addEventListener('submit', evt => {
         message: 'Failed to load images. Please try again!',
       });
     });
-});
+}
