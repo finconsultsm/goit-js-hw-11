@@ -9,6 +9,7 @@ const loader = document.querySelector('.loader-wrapper');
 const url = new URL(window.location);
 const searchParams = url.searchParams;
 const query = searchParams.get('q');
+const perPage = searchParams.get('per_page') ? searchParams.get('per_page') : 15
 
 if (query) {
   fetchImage(query)
@@ -32,18 +33,19 @@ form.addEventListener('submit', (evt => {
   }
 
   url.searchParams.set('q', query);
+  url.searchParams.set('per_page', perPage)
   window.history.pushState({}, '', url);
   
-  fetchImage(query);
+  fetchImage(query, perPage);
 
 }));
 
-function fetchImage (query) {
+function fetchImage (query, perPage) {
   
 
   loader.classList.add('show');
 
-  const response = searchImages(query)
+  const response = searchImages(query, perPage)
     .then(data => {
       loader.classList.remove('show');
 
